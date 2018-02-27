@@ -57,13 +57,19 @@
 				&cam_sensor_rear_vana_sleep>;
 		gpios = <&tlmm 26 0>,
 			<&tlmm 40 0>,
+			<&tlmm 118 0>,
+			<&tlmm 119 0>,
 			<&tlmm 39 0>;
 		qcom,gpio-reset = <1>;
 		qcom,gpio-standby = <2>;
-		qcom,gpio-req-tbl-num = <0 1 2>;
-		qcom,gpio-req-tbl-flags = <1 0 0>;
+		qcom,gpio-vdig = <3>;
+		qcom,gpio-vana = <4>;
+		qcom,gpio-req-tbl-num = <0 1 2 3 4>;
+		qcom,gpio-req-tbl-flags = <1 0 0 0 0>;
 		qcom,gpio-req-tbl-label = "CAMIF_MCLK0",
 			"CAM_RESET0",
+			"CAM_VDIG",
+			"CAM_VANA",
 			"CAM_STANDBY0";
 		clocks = <&clock_gcc clk_mclk0_clk_src>,
 				<&clock_gcc clk_gcc_camss_mclk0_clk>;
