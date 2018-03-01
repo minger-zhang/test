@@ -1,0 +1,140 @@
+/*
+ * Copyright (c) 2017-2018, The Linux Foundation. All rights reserved.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 and
+ * only version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+#include "apq8053-lite-dragon.dtsi"
+
+&i2c_3 {
+	status = "okay";
+	/delete-node/ focaltech@38;
+	gt9xx-i2c@14 {
+		compatible = "goodix,gt9xx";
+		reg = <0x14>;
+		status = "okay";
+		vdd_ana-supply = <&pm8953_l10>;
+		vcc_i2c-supply = <&pm8953_l5>;
+		interrupt-parent = <&tlmm>;
+		interrupts = <65 0x2008>;
+		pinctrl-names = "gdix_ts_int_default", "gdix_ts_int_output_low", "gdix_ts_int_output_high", "gdix_ts_int_input";
+		pinctrl-0 = <&ts_int_default>;
+		pinctrl-1 = <&ts_int_output_low>;
+		pinctrl-2 = <&ts_int_output_high>;
+		pinctrl-3 = <&ts_int_input>;
+
+		reset-gpios = <&tlmm 64 0x00>;
+		irq-gpios = <&tlmm 65 0x2008>;
+		irq-flags = <2>;
+
+		touchscreen-max-id = <11>;
+		touchscreen-size-x = <1200>;
+		touchscreen-size-y = <1920>;
+		touchscreen-max-w = <1024>;
+		touchscreen-max-p = <1024>;
+		/*touchscreen-key-map = <172>, <158>;*/ /*KEY_HOMEPAGE, KEY_BACK*/
+
+		goodix,type-a-report = <0>;
+		goodix,driver-send-cfg = <1>;
+		goodix,create-wr-node = <1>;
+		goodix,wakeup-with-reset = <0>;
+		goodix,resume-in-workqueue = <0>;
+		goodix,int-sync = <1>;
+		goodix,swap-x2y = <0>;
+		goodix,esd-protect = <1>;
+		goodix,pen-suppress-finger = <0>;
+		goodix,auto-update = <0>;
+		goodix,auto-update-cfg = <0>;
+		goodix,power-off-sleep = <0>;
+
+		goodix,cfg-group0 = [
+			57 B0 04 80 07 0A F4 10 11 C8 3C 0D 55 41 3A 14
+			00 00 09 AA 22 22 00 17 19 1C 14 95 35 FF 33 35
+			36 11 3A 00 00 20 43 1C 18 16 1E 80 83 12 64 64
+			28 4A 0A 28 5A 94 C5 F3 23 28 10 04 BE 2B 00 B3
+			33 AC AD 3C 00 AC 46 00 AB 53 0C AB 00 10 33 28
+			24 01 00 00 00 00 00 00 23 0F A6 52 43 25 0F 00
+			00 04 00 00 00 88 A5 99 1E 02 00 1E 40 00 32 1E
+			1D 1C 1B 1A 19 18 17 16 15 14 13 12 11 10 0F 0E
+			0D 0C 0B 0A 09 08 07 06 05 04 03 02 01 00 2A 29
+			28 27 26 25 24 23 22 21 20 1F 1E 1D 1C 1B 19 18
+			17 16 15 14 13 12 11 10 0F 0E 0D 0C 0B 0A 09 08
+			07 06 05 04 03 02 01 00 0C 01
+		];
+
+		goodix,cfg-group2 = [
+			57 B0 04 80 07 0A F4 10 11 C8 3C 0D 55 41 3A 14
+			00 00 09 AA 22 22 00 17 19 1C 14 95 35 FF 33 35
+			36 11 3A 00 00 20 43 1C 18 16 1E 80 83 12 64 64
+			28 4A 0A 28 5A 94 C5 F3 23 28 10 04 98 2B 00 8C
+			33 AC 85 3C 00 84 46 00 83 53 0C 83 00 10 33 28
+			24 01 00 00 00 00 00 00 23 0F A6 52 43 25 0F 00
+			00 04 00 00 00 88 A5 99 1E 02 00 1E 40 00 32 1E
+			1D 1C 1B 1A 19 18 17 16 15 14 13 12 11 10 0F 0E
+			0D 0C 0B 0A 09 08 07 06 05 04 03 02 01 00 2A 29
+			28 27 26 25 24 23 22 21 20 1F 1E 1D 1C 1B 19 18
+			17 16 15 14 13 12 11 10 0F 0E 0D 0C 0B 0A 09 08
+			07 06 05 04 03 02 01 00 F9 01
+		];
+	};
+};
+
+&mdss_dsi {
+	hw-config = "single_dsi";
+};
+
+&mdss_dsi0 {
+	qcom,dsi-pref-prim-pan = <&dsi_boent51021_1200p_video>;
+	pinctrl-names = "mdss_default", "mdss_sleep";
+	pinctrl-0 = <&mdss_dsi_active &mdss_te_active>;
+	pinctrl-1 = <&mdss_dsi_suspend &mdss_te_suspend>;
+
+	vdd-supply = <&pm8953_l10>;
+	vddio-supply = <&pm8953_l6>;
+	lab-supply = <&lab_regulator>;
+	ibb-supply = <&ibb_regulator>;
+
+	qcom,platform-te-gpio = <&tlmm 24 0>;
+	qcom,platform-reset-gpio = <&tlmm 61 0>;
+	qcom,ext_vdd-gpio = <&tlmm 100 0>;
+	qcom,platform-bklight-en-gpio = <&tlmm 95 0>;
+
+	qcom,platform-lane-config = [00 00 ff 0f
+				00 00 ff 0f
+				00 00 ff 0f
+				00 00 ff 0f
+				00 00 ff 8f];
+};
+
+&mdss_dsi1 {
+	status = "disabled";
+};
+
+&labibb {
+	status = "ok";
+	qpnp,qpnp-labibb-mode = "lcd";
+};
+
+&wled {
+	qcom,cons-sync-write-delay-us = <1000>;
+	qcom,led-strings-list = [00 01 02 03];
+};
+
+&camera0 {
+	qcom,mount-angle = <270>;
+};
+
+&camera1 {
+	qcom,mount-angle = <270>;
+};
+
+&camera2{
+	qcom,mount-angle = <270>;
+};

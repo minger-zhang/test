@@ -1,0 +1,49 @@
+/*
+ * Copyright (c) 2015-2016, The Linux Foundation. All rights reserved.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 and
+ * only version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+/dts-v1/;
+
+#include "msm8953.dtsi"
+#include "msm8953-mtp.dtsi"
+
+/ {
+	model = "Qualcomm Technologies, Inc. MSM8953 MTP";
+	compatible = "qcom,msm8953-mtp", "qcom,msm8953", "qcom,mtp";
+	qcom,board-id= <8 0>;
+};
+
+&blsp2_uart0 {
+	status = "ok";
+};
+
+&soc {
+	cnss_sdio: qcom,cnss_sdio {
+		compatible = "qcom,cnss_sdio";
+		subsys-name = "AR6320";
+
+		/**
+		 * There is no vdd-wlan on board and this is not for DSRC.
+		 * IO and XTAL share the same vreg.
+		 */
+		/*vdd-wlan-io-supply = <&pm8916_l5>;*/
+		qcom,wlan-ramdump-dynamic = <0x200000>;
+		qcom,msm-bus,name = "msm-cnss";
+		qcom,msm-bus,num-cases = <4>;
+		qcom,msm-bus,num-paths = <1>;
+		qcom,msm-bus,vectors-KBps =
+			<79 512 0 0>,             /* No vote */
+			<79 512 6250 200000>,     /* 50 Mbps */
+			<79 512 25000 200000>,    /* 200 Mbps */
+			<79 512 2048000 4096000>; /* MAX */
+	};
+};
